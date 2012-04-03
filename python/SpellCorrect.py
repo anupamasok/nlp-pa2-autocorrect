@@ -15,7 +15,7 @@ import types
 # Modified version of Peter Norvig's spelling corrector
 """Spelling Corrector.
 
-Copyright 2007 Peter Norvig. 
+Copyright 2007 Peter Norvig.
 Open source code under MIT license: http://www.opensource.org/licenses/mit-license.php
 """
 
@@ -23,7 +23,7 @@ import re, collections
 
 class SpellCorrect:
   """Holds edit model, language model, corpus. trains"""
-  
+
 
   def __init__(self, lm, corpus):
     """initializes the language model."""
@@ -31,7 +31,7 @@ class SpellCorrect:
     self.editModel = EditModel('../data/count_1edit.txt', corpus)
 
 
-  def evaluate(self, corpus):  
+  def evaluate(self, corpus):
     """Tests this speller on a corpus, returns a SpellingResult"""
     numCorrect = 0
     numTotal = 0
@@ -83,7 +83,7 @@ class SpellCorrect:
     return argmax
 
 
-  def correctCorpus(self, corpus): 
+  def correctCorpus(self, corpus):
     """Corrects a whole corpus, returns a JSON representation of the output."""
     string_list = [] # we will join these with commas,  bookended with []
     sentences = corpus.corpus
@@ -96,7 +96,7 @@ class SpellCorrect:
     return output
 
 
-    
+
 def main():
   """Trains all of the language models and tests them on the dev data. Change devPath if you
      wish to do things like test on the training data."""
@@ -109,10 +109,16 @@ def main():
   print 'Uniform Language Model: '
   uniformLM = UniformLanguageModel(trainingCorpus)
   uniformSpell = SpellCorrect(uniformLM, trainingCorpus)
-  uniformOutcome = uniformSpell.evaluate(devCorpus) 
+  uniformOutcome = uniformSpell.evaluate(devCorpus)
   print str(uniformOutcome)
 
-  print 'Laplace Unigram Language Model: ' 
+  print 'Unigram Language Model: '
+  unigramLM = UnigramLanguageModel(trainingCorpus)
+  unigramSpell = SpellCorrect(unigramLM, trainingCorpus)
+  unigramOutcome = unigramSpell.evaluate(devCorpus)
+  print str(unigramOutcome)
+
+  print 'Laplace Unigram Language Model: '
   laplaceUnigramLM = LaplaceUnigramLanguageModel(trainingCorpus)
   laplaceUnigramSpell = SpellCorrect(laplaceUnigramLM, trainingCorpus)
   laplaceUnigramOutcome = laplaceUnigramSpell.evaluate(devCorpus)
@@ -124,7 +130,7 @@ def main():
   laplaceBigramOutcome = laplaceBigramSpell.evaluate(devCorpus)
   print str(laplaceBigramOutcome)
 
-  print 'Stupid Backoff Language Model: '  
+  print 'Stupid Backoff Language Model: '
   sbLM = StupidBackoffLanguageModel(trainingCorpus)
   sbSpell = SpellCorrect(sbLM, trainingCorpus)
   sbOutcome = sbSpell.evaluate(devCorpus)
