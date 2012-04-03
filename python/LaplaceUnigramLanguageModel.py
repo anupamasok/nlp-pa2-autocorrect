@@ -1,4 +1,5 @@
 import collections
+import math
 
 
 class LaplaceUnigramLanguageModel:
@@ -10,14 +11,22 @@ class LaplaceUnigramLanguageModel:
         self.train(corpus)
 
     def train(self, corpus):
-        """ Takes a corpus and trains your language model.  Compute any counts
+        """Takes a corpus and trains your language model.  Compute any counts
         or other corpus statistics in this function."""
-        # TODO your code here
-        pass
+        for sentence in corpus.corpus:
+            for datum in sentence.data:
+                token = datum.word
+                self.unigramCounts[token] = self.unigramCounts[token] + 1
+                self.total += 1
+        self.vocab_size = len(self.unigramCounts)
 
     def score(self, sentence):
-        """ Takes a list of strings as argument and returns the log-probability
+        """Takes a list of strings as argument and returns the log-probability
         of the sentence using your language model. Use whatever data you
         computed in train() here."""
-        # TODO your code here
-        return 0.0
+        score = 0.0
+        for token in sentence:
+            count = self.unigramCounts[token]
+            score += math.log(count + 1)
+            score -= math.log(self.total + self.vocab_size)
+        return score
