@@ -47,6 +47,7 @@ class StupidBackoffLanguageModel:
                 score += math.log(bicount)
                 score -= math.log(bi_unicount)
             else:
+                score += math.log(0.4)
                 score += math.log(unicount + 1)
                 score -= math.log(self.total + self.vocab_size)
             previous = token
